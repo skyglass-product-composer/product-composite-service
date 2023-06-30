@@ -20,8 +20,8 @@ jar {
 }
 
 dependencies {
-    implementation project(':api')
-    implementation project(':util')
+    implementation 'se.magnus.microservices.api:product-common-api:0.2'
+    implementation 'se.magnus.microservices.util:product-common-util:0.2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -59,6 +59,19 @@ dependencyManagement {
         dependency "io.github.resilience4j:resilience4j-micrometer:${resilience4jVersion}"
         dependency "io.github.resilience4j:resilience4j-circularbuffer:${resilience4jVersion}"
     }
+}
+
+bootBuildImage {
+	imageName = "${project.name}"
+	environment = ["BP_JVM_VERSION": "17.*"]
+
+	docker {
+		publishRegistry {
+			username = project.findProperty("registryUsername")
+			password = project.findProperty("registryToken")
+			url = project.findProperty("registryUrl")
+		}
+	}
 }
 
 test {
